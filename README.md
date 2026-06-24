@@ -126,6 +126,17 @@ GEMINI_MODEL_FALLBACK=gemini-2.5-flash-lite
 
 Never expose `SUPABASE_SERVICE_ROLE_KEY`: it is used only by the server-side `/api/practice-attempts` route. The browser sends the signed-in user's access token to that route; the route verifies it before reading or writing only that user's records.
 
+### Email confirmation and redirect URLs
+
+Configure Supabase before asking external users to register:
+
+1. In **Supabase Dashboard → Authentication → URL Configuration**, set **Site URL** to the deployed site URL.
+2. Add redirect URLs for the production domain with `/**`, for example `https://your-domain.example/**`.
+3. Add the local development URL `http://localhost:3000/**`.
+4. If testing through a temporary server IP address, add that IP URL with `/**`, for example `http://203.0.113.10/**`.
+
+The registration page sends each confirmation email back to `${window.location.origin}/auth/login?confirmed=1`, so the same code works locally and in production. Old confirmation emails may still contain an old redirect URL. After changing Supabase URL Configuration, users should register again or request a new confirmation email.
+
 ### Test Stage 7
 
 1. Open `/auth`, register an email/password account, and log in. Verify the email first if Email Confirmations are enabled.
